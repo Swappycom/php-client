@@ -2,7 +2,7 @@
   "modelPackage": "Swappy\\Api\\Model",
   "apiPackage": "Swappy\\Api\\Endpoint",
   "invokerPackage": "Swappy",
-  "gitUserId": "Swappycom",
+  "gitUserId": "swappycom",
   "gitRepoId": "php-client",
   "artifactVersion": "0.1.0"
 }
