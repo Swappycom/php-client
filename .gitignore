@@ -1,0 +1,6 @@
+#ide
+.idea/workspace.xml
+.idea/vagrant.xml
+.idea/tasks.xml
+.idea/dataSources.ids
+.idea/dataSources.local.xml

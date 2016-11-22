@@ -1,0 +1,1550 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "0.1.0",
+        "title": "Swappy REST API",
+        "description": "This is Swappy's REST API. See below for all available endpoints. This is an <strong>alpha version</strong> and might still be subject to change"
+    },
+    "host": "api.swappy.com",
+    "basePath": "/",
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "security": [
+        {
+            "oauth": [
+                "buy",
+                "sell",
+                "email",
+                "addresses"
+            ]
+        }
+    ],
+    "securityDefinitions": {
+        "oauth": {
+            "type": "oauth2",
+            "flow": "implicit",
+            "authorizationUrl": "https://api.swappy.com/oauth2/authorize",
+            "scopes": {
+                "buy": "Manage your purchases",
+                "sell": "Create and manage your products",
+                "email": "View you email address",
+                "addresses": "Manage your postal adresses"
+            }
+        }
+    },
+    "paths": {
+        "/oauth2/authorize": {
+            "get": {
+                "description": "oAuth authorize endpoint, the user should be redirected to this page to allow the application.",
+                "tags": [
+                    "oauth"
+                ],
+                "parameters": [
+                    {
+                        "name": "client_id",
+                        "in": "query",
+                        "type": "integer",
+                        "description": "Application ID",
+                        "required": true
+                    },
+                    {
+                        "name": "redirect_uri",
+                        "in": "query",
+                        "type": "string",
+                        "description": "URI where the user will be returned to, must match application's configuration",
+                        "required": true
+                    },
+                    {
+                        "name": "state",
+                        "in": "query",
+                        "type": "string",
+                        "description": "State that will be passed back to return_uri",
+                        "required": true
+                    },
+                    {
+                        "name": "scope",
+                        "in": "query",
+                        "type": "string",
+                        "description": "Space separated scopes"
+                    },
+                    {
+                        "name": "response_type",
+                        "in": "query",
+                        "type": "string",
+                        "enum": [
+                            "code",
+                            "token"
+                        ],
+                        "description": "Type of request",
+                        "required": true
+                    },
+                    {
+                        "name": "language",
+                        "in": "query",
+                        "type": "string",
+                        "description": "Language for the response"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "schema": {
+                            "$ref": "#/definitions/Member"
+                        }
+                    }
+                }
+            }
+        },
+        "/oauth2/token": {
+            "post": {
+                "description": "Get access token",
+                "tags": [
+                    "oauth"
+                ],
+                "parameters": [
+                    {
+                        "name": "client_id",
+                        "in": "formData",
+                        "type": "integer",
+                        "description": "App API id",
+                        "required": true
+                    },
+                    {
+                        "name": "client_secret",
+                        "in": "formData",
+                        "type": "string",
+                        "description": "App API secret",
+                        "required": true
+                    },
+                    {
+                        "name": "grant_type",
+                        "in": "formData",
+                        "type": "string",
+                        "enum": [
+                            "authorization_code",
+                            "client_credentials"
+                        ],
+                        "description": "Grant type for this token request",
+                        "required": true
+                    },
+                    {
+                        "name": "code",
+                        "in": "formData",
+                        "type": "string",
+                        "description": "Access code, **required** for `authorization_code` grant type."
+                    },
+                    {
+                        "name": "scope",
+                        "in": "formData",
+                        "type": "string",
+                        "description": "Space separated scope for `authorization_code` grant type."
+                    },
+                    {
+                        "name": "redirect_uri",
+                        "in": "formData",
+                        "type": "string",
+                        "description": "Return URI for security purpose, must match the one sent to `/authorize`, **required** for `authorization_code` grant type."
+                    },
+                    {
+                        "name": "language",
+                        "in": "query",
+                        "type": "string",
+                        "description": "Language for the response"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                }
+            }
+        },
+        "/v1/me": {
+            "get": {
+                "operationId": "getMe",
+                "description": "Get info of current user\n",
+                "security": [
+                    {
+                        "oauth": [
+                            "email"
+                        ]
+                    }
+                ],
+                "tags": [
+                    "oauth"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response\n",
+                        "schema": {
+                            "$ref": "#/definitions/Member"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "language",
+                        "in": "query",
+                        "type": "string",
+                        "description": "Language for the response"
+                    }
+                ]
+            }
+        },
+        "/v1/me/addresses": {
+            "get": {
+                "operationId": "getMyAddresses",
+                "description": "Get users addresses\n",
+                "security": [
+                    {
+                        "oauth": [
+                            "addresses"
+                        ]
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "If-None-Match",
+                        "in": "header",
+                        "type": "string",
+                        "description": "Etag, will return `304 Not Modified` if content hasn't changed"
+                    },
+                    {
+                        "name": "language",
+                        "in": "query",
+                        "type": "string",
+                        "description": "Language for the response"
+                    }
+                ],
+                "tags": [
+                    "oauth"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response\n",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Address"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/categories": {
+            "get": {
+                "operationId": "getCategories",
+                "tags": [
+                    "data"
+                ],
+                "description": "Get all categories from the website\n",
+                "parameters": [
+                    {
+                        "name": "depth",
+                        "in": "query",
+                        "type": "integer",
+                        "description": "Number sublevels wanted, `1` for top level only. **default:** no limit"
+                    },
+                    {
+                        "name": "If-None-Match",
+                        "in": "header",
+                        "type": "string",
+                        "description": "Etag, will return `304 Not Modified` if content hasn't changed"
+                    },
+                    {
+                        "name": "If-Modified-Since",
+                        "in": "header",
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Will return `304 Not Modified` if content hasn't changed"
+                    },
+                    {
+                        "name": "language",
+                        "in": "query",
+                        "type": "string",
+                        "description": "Language for the response"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Category"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/categories/{id}": {
+            "get": {
+                "operationId": "getCategory",
+                "tags": [
+                    "data"
+                ],
+                "description": "Get one category categories from the website\n",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "type": "integer",
+                        "description": "Product ID",
+                        "required": true
+                    },
+                    {
+                        "name": "If-None-Match",
+                        "in": "header",
+                        "type": "string",
+                        "description": "Etag, will return `304 Not Modified` if content hasn't changed"
+                    },
+                    {
+                        "name": "If-Modified-Since",
+                        "in": "header",
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Will return `304 Not Modified` if content hasn't changed"
+                    },
+                    {
+                        "name": "language",
+                        "in": "query",
+                        "type": "string",
+                        "description": "Language for the response"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "schema": {
+                            "$ref": "#/definitions/Category"
+                        }
+                    },
+                    "404": {
+                        "description": "Category not found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/products/{id}": {
+            "get": {
+                "operationId": "getProduct",
+                "tags": [
+                    "products"
+                ],
+                "description": "Get a specific product by ID\n",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "type": "integer",
+                        "description": "Product ID",
+                        "required": true
+                    },
+                    {
+                        "name": "If-None-Match",
+                        "in": "header",
+                        "type": "string",
+                        "description": "Etag, will return `304 Not Modified` if content hasn't changed"
+                    },
+                    {
+                        "name": "If-Modified-Since",
+                        "in": "header",
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Will return `304 Not Modified` if content hasn't changed"
+                    },
+                    {
+                        "name": "language",
+                        "in": "query",
+                        "type": "string",
+                        "description": "Language for the response"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "schema": {
+                            "$ref": "#/definitions/ShortProduct"
+                        }
+                    },
+                    "404": {
+                        "description": "Product not found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "operationId": "updateProduct",
+                "security": [
+                    {
+                        "oauth": [
+                            "sell"
+                        ]
+                    }
+                ],
+                "tags": [
+                    "products"
+                ],
+                "description": "Edit an existing product\n",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "type": "integer",
+                        "description": "Product ID",
+                        "required": true
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Informations that you are editing, images will be added",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Product"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "schema": {
+                            "$ref": "#/definitions/Product"
+                        }
+                    },
+                    "403": {
+                        "description": "Product not yours",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Product not found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "422": {
+                        "description": "Data Validation Error",
+                        "schema": {
+                            "$ref": "#/definitions/ValidationError"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "operationId": "endProduct",
+                "security": [
+                    {
+                        "oauth": [
+                            "sell"
+                        ]
+                    }
+                ],
+                "tags": [
+                    "products"
+                ],
+                "description": "End a product before it's normal end date\n",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "type": "integer",
+                        "description": "Product ID",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "schema": {
+                            "$ref": "#/definitions/Product"
+                        }
+                    },
+                    "403": {
+                        "description": "Product is not yours or cannot be canceled",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "422": {
+                        "description": "Product is not online",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Product not found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/pictures": {
+            "post": {
+                "operationId": "uploadPicture",
+                "security": [
+                    {
+                        "oauth": [
+                            "sell"
+                        ]
+                    }
+                ],
+                "tags": [
+                    "products"
+                ],
+                "description": "Upload images\nImages will be deleted after 30 days if not used in a product.",
+                "parameters": [
+                    {
+                        "name": "files",
+                        "in": "formData",
+                        "type": "file",
+                        "description": "The images, can be an array",
+                        "required": true
+                    },
+                    {
+                        "name": "language",
+                        "in": "query",
+                        "type": "string",
+                        "description": "Language for the response"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/TempImage"
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "At least one error upload failed",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Error"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/products": {
+            "post": {
+                "operationId": "createProduct",
+                "security": [
+                    {
+                        "oauth": [
+                            "sell"
+                        ]
+                    }
+                ],
+                "tags": [
+                    "products"
+                ],
+                "description": "Submit a new product to your account\n",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Product object that will be added to the store",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Product"
+                        }
+                    },
+                    {
+                        "name": "language",
+                        "in": "query",
+                        "type": "string",
+                        "description": "Language for the response"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "schema": {
+                            "$ref": "#/definitions/Product"
+                        }
+                    },
+                    "403": {
+                        "description": "Product not yours or cannot be edited",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Product not found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "422": {
+                        "description": "Data Validation Error",
+                        "schema": {
+                            "$ref": "#/definitions/ValidationError"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/bulkjobs": {
+            "post": {
+                "operationId": "createBulkJob",
+                "security": [
+                    {
+                        "oauth": [
+                            "sell"
+                        ]
+                    }
+                ],
+                "tags": [
+                    "bulk"
+                ],
+                "description": "Start a bulk product job\n",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Product list to be uploaded",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Product"
+                            }
+                        }
+                    },
+                    {
+                        "name": "language",
+                        "in": "query",
+                        "type": "string",
+                        "description": "Language for the response"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "schema": {
+                            "$ref": "#/definitions/BulkJob"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/bulkjobs/{id}": {
+            "get": {
+                "operationId": "getBulkJob",
+                "security": [
+                    {
+                        "oauth": [
+                            "sell"
+                        ]
+                    }
+                ],
+                "tags": [
+                    "bulk"
+                ],
+                "description": "Get infos about a job\n",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "type": "integer",
+                        "description": "Product ID",
+                        "required": true
+                    },
+                    {
+                        "name": "If-None-Match",
+                        "in": "header",
+                        "type": "string",
+                        "description": "Etag, will return `304 Not Modified` if content hasn't changed"
+                    },
+                    {
+                        "name": "If-Modified-Since",
+                        "in": "header",
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Will return `304 Not Modified` if content hasn't changed"
+                    },
+                    {
+                        "name": "language",
+                        "in": "query",
+                        "type": "string",
+                        "description": "Language for the response"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "schema": {
+                            "$ref": "#/definitions/BulkJob"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/bulkjobs/{id}/results": {
+            "get": {
+                "operationId": "getBulkJobResult",
+                "security": [
+                    {
+                        "oauth": [
+                            "sell"
+                        ]
+                    }
+                ],
+                "tags": [
+                    "bulk"
+                ],
+                "description": "Get results for a job",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "type": "integer",
+                        "description": "Product ID",
+                        "required": true
+                    },
+                    {
+                        "name": "If-None-Match",
+                        "in": "header",
+                        "type": "string",
+                        "description": "Etag, will return `304 Not Modified` if content hasn't changed"
+                    },
+                    {
+                        "name": "If-Modified-Since",
+                        "in": "header",
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Will return `304 Not Modified` if content hasn't changed"
+                    },
+                    {
+                        "name": "language",
+                        "in": "query",
+                        "type": "string",
+                        "description": "Language for the response"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/BulkJobResult"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/shippingmethods": {
+            "get": {
+                "operationId": "getShippingMethods",
+                "tags": [
+                    "data"
+                ],
+                "description": "Get all shipping methods\n",
+                "parameters": [
+                    {
+                        "name": "If-None-Match",
+                        "in": "header",
+                        "type": "string",
+                        "description": "Etag, will return `304 Not Modified` if content hasn't changed"
+                    },
+                    {
+                        "name": "If-Modified-Since",
+                        "in": "header",
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Will return `304 Not Modified` if content hasn't changed"
+                    },
+                    {
+                        "name": "language",
+                        "in": "query",
+                        "type": "string",
+                        "description": "Language for the response"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ShippingMethod"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/durations": {
+            "get": {
+                "operationId": "getDurations",
+                "tags": [
+                    "data"
+                ],
+                "description": "Get available durations\n",
+                "parameters": [
+                    {
+                        "name": "If-None-Match",
+                        "in": "header",
+                        "type": "string",
+                        "description": "Etag, will return `304 Not Modified` if content hasn't changed"
+                    },
+                    {
+                        "name": "If-Modified-Since",
+                        "in": "header",
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Will return `304 Not Modified` if content hasn't changed"
+                    },
+                    {
+                        "name": "language",
+                        "in": "query",
+                        "type": "string",
+                        "description": "Language for the response"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "auctions": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/Duration"
+                                    }
+                                },
+                                "fixed": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/Duration"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/options": {
+            "get": {
+                "operationId": "getOptions",
+                "tags": [
+                    "data"
+                ],
+                "description": "Get paying options for a product\n",
+                "parameters": [
+                    {
+                        "name": "If-None-Match",
+                        "in": "header",
+                        "type": "string",
+                        "description": "Etag, will return `304 Not Modified` if content hasn't changed"
+                    },
+                    {
+                        "name": "If-Modified-Since",
+                        "in": "header",
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Will return `304 Not Modified` if content hasn't changed"
+                    },
+                    {
+                        "name": "language",
+                        "in": "query",
+                        "type": "string",
+                        "description": "Language for the response"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Option"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/version": {
+            "get": {
+                "operationId": "getSoftwareVersion",
+                "description": "Get current software version, this is NOT the api version\n",
+                "tags": [
+                    "misc"
+                ],
+                "parameters": [
+                    {
+                        "name": "version",
+                        "in": "query",
+                        "type": "string",
+                        "description": "Will return an error if version is lower then current version",
+                        "required": false
+                    },
+                    {
+                        "name": "language",
+                        "in": "query",
+                        "type": "string",
+                        "description": "Language for the response"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response\n",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "version": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Version parameters is out of date\n",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "Error": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "message"
+            ]
+        },
+        "ValidationError": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "errors": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/FieldError"
+                    }
+                }
+            },
+            "required": [
+                "message"
+            ]
+        },
+        "FieldError": {
+            "type": "object",
+            "properties": {
+                "field": {
+                    "type": "string"
+                },
+                "code": {
+                    "type": "string",
+                    "description": "Error code",
+                    "enum": [
+                        "unknown_field",
+                        "missing_field",
+                        "not_found",
+                        "already_exists",
+                        "invalid"
+                    ]
+                },
+                "message": {
+                    "type": "string",
+                    "description": "Message in case <code>code</code> is <code>invalid</code>"
+                }
+            },
+            "required": [
+                "field",
+                "code"
+            ]
+        },
+        "Category": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "key": {
+                    "type": "string"
+                },
+                "children": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Category"
+                    }
+                }
+            },
+            "required": [
+                "id"
+            ]
+        },
+        "Delivery": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "cost": {
+                    "type": "number",
+                    "format": "float"
+                }
+            },
+            "required": [
+                "id"
+            ]
+        },
+        "Payment": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "user_info": {
+                    "type": "string",
+                    "description": "Paypal email when using paypal"
+                }
+            },
+            "required": [
+                "id"
+            ]
+        },
+        "ProductBulkResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "description": "Inserted product ID, null if a validation error occurred"
+                }
+            }
+        },
+        "Product": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "quantity": {
+                    "type": "integer"
+                },
+                "images": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ProductImage"
+                    }
+                },
+                "category": {
+                    "$ref": "#/definitions/Category"
+                },
+                "address": {
+                    "$ref": "#/definitions/Address"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "auction": {
+                    "type": "boolean"
+                },
+                "date_start": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "ISO-8601 date or Duration, if it is a duration, it will be relative to process time"
+                },
+                "live_id": {
+                    "type": "integer"
+                },
+                "price": {
+                    "type": "number",
+                    "format": "double"
+                },
+                "reserve_price": {
+                    "type": "number",
+                    "format": "double"
+                },
+                "buynow_price": {
+                    "type": "number",
+                    "format": "double"
+                },
+                "lot_number": {
+                    "type": "string"
+                },
+                "delivery": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Delivery"
+                    }
+                },
+                "payment": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Payment"
+                    }
+                },
+                "auto_renew": {
+                    "type": "boolean"
+                },
+                "taxes": {
+                    "type": "object",
+                    "properties": {
+                        "charge": {
+                            "type": "boolean"
+                        },
+                        "include_shipping": {
+                            "type": "boolean"
+                        }
+                    }
+                },
+                "offer": {
+                    "type": "object",
+                    "properties": {
+                        "accept": {
+                            "type": "boolean"
+                        },
+                        "accept_over": {
+                            "type": "number",
+                            "format": "double"
+                        },
+                        "refuse_under": {
+                            "type": "number",
+                            "format": "double"
+                        }
+                    }
+                },
+                "duration": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "title",
+                "description",
+                "payment",
+                "delivery",
+                "auction",
+                "category",
+                "price"
+            ]
+        },
+        "ShortProduct": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "seller": {
+                    "$ref": "#/definitions/ShortMember"
+                },
+                "quantity": {
+                    "type": "integer"
+                },
+                "images": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ProductImage"
+                    }
+                },
+                "category": {
+                    "$ref": "#/definitions/Category"
+                },
+                "address": {
+                    "$ref": "#/definitions/ShortAddress"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "auction": {
+                    "type": "boolean"
+                },
+                "date_end": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "live_id": {
+                    "type": "integer"
+                },
+                "price": {
+                    "type": "number",
+                    "format": "double"
+                },
+                "starting_price": {
+                    "type": "number",
+                    "format": "double"
+                },
+                "reserve_price": {
+                    "type": "number",
+                    "format": "double"
+                },
+                "buynow_price": {
+                    "type": "number",
+                    "format": "double"
+                },
+                "lot_number": {
+                    "type": "string"
+                },
+                "delivery": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Delivery"
+                    }
+                },
+                "payment": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Payment"
+                    }
+                },
+                "auto_renew": {
+                    "type": "boolean"
+                },
+                "taxes": {
+                    "type": "object",
+                    "properties": {
+                        "charge": {
+                            "type": "boolean"
+                        },
+                        "include_shipping": {
+                            "type": "boolean"
+                        }
+                    }
+                },
+                "offer": {
+                    "type": "object",
+                    "properties": {
+                        "accept": {
+                            "type": "boolean"
+                        }
+                    }
+                },
+                "duration": {
+                    "type": "integer"
+                }
+            }
+        },
+        "ShortMember": {
+            "type": "object",
+            "properties": {
+                "login": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "login"
+            ]
+        },
+        "Member": {
+            "type": "object",
+            "properties": {
+                "last_name": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "login": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string",
+                    "format": "email"
+                },
+                "birthdate": {
+                    "type": "string",
+                    "format": "date"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "bio": {
+                    "type": "string"
+                },
+                "status": {
+                    "enum": [
+                        "activated",
+                        "disabled",
+                        "verified"
+                    ]
+                }
+            },
+            "required": [
+                "last_name",
+                "first_name",
+                "login",
+                "email",
+                "birthdate",
+                "phone",
+                "status"
+            ]
+        },
+        "BulkJob": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "created": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "progress": {
+                    "type": "integer"
+                },
+                "status": {
+                    "enum": [
+                        "pending",
+                        "running",
+                        "done"
+                    ]
+                }
+            },
+            "required": [
+                "id"
+            ]
+        },
+        "BulkJobResult": {
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "message_id": {
+                    "type": "string",
+                    "description": "ID that was/is given with the add request and that will be given back"
+                },
+                "error": {
+                    "$ref": "#/definitions/ValidationError"
+                },
+                "product": {
+                    "$ref": "#/definitions/ProductBulkResponse"
+                }
+            },
+            "required": [
+                "success"
+            ]
+        },
+        "ProductImage": {
+            "type": "object",
+            "properties": {
+                "url": {
+                    "type": "string"
+                },
+                "cover": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "url"
+            ]
+        },
+        "TempImage": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "description": "File type (jpg, png...)"
+                },
+                "url": {
+                    "type": "string",
+                    "description": "Temp URL of the image, used for product submission"
+                },
+                "expires": {
+                    "type": "string",
+                    "format": "date",
+                    "description": "This temp image will be deleted after this date"
+                }
+            },
+            "required": [
+                "url"
+            ]
+        },
+        "ShippingMethod": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "country": {
+                    "type": "string",
+                    "description": "The country FROM wich this shipping method can be use (2 letter code). Can also be ALL (Available everywhere) or INT (Available for all origin countries but Canada)"
+                },
+                "methods": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/DeliveryType"
+                    }
+                }
+            },
+            "required": [
+                "name",
+                "methods"
+            ]
+        },
+        "Duration": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "duration": {
+                    "type": "integer",
+                    "description": "Duration in days"
+                }
+            },
+            "required": [
+                "name",
+                "duration"
+            ]
+        },
+        "Option": {
+            "type": "object",
+            "properties": {
+                "key": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number",
+                    "format": "double"
+                }
+            },
+            "required": [
+                "key",
+                "price"
+            ]
+        },
+        "DeliveryType": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "international": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "id",
+                "name"
+            ]
+        },
+        "ShortAddress": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "locality": {
+                    "type": "string"
+                },
+                "postal_code": {
+                    "type": "string"
+                },
+                "administrative_area": {
+                    "type": "string"
+                },
+                "country": {
+                    "type": "string"
+                },
+                "country_code": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "id"
+            ]
+        },
+        "Address": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "line1": {
+                    "type": "string"
+                },
+                "line2": {
+                    "type": "string"
+                },
+                "postal_code": {
+                    "type": "string"
+                },
+                "locality": {
+                    "type": "string"
+                },
+                "administrative_area": {
+                    "type": "string"
+                },
+                "country": {
+                    "type": "string"
+                },
+                "country_code": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "id",
+                "name",
+                "line1",
+                "postal_code",
+                "locality",
+                "administrative_area",
+                "country"
+            ]
+        }
+    }
+}

@@ -1,0 +1,8 @@
+{
+  "modelPackage": "Swappy\\Api\\Model",
+  "apiPackage": "Swappy\\Api\\Endpoint",
+  "invokerPackage": "Swappy",
+  "gitUserId": "swappy",
+  "gitRepoId": "php-client",
+  "artifactVersion": "0.1.0"
+}
