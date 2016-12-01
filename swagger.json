@@ -1,7 +1,7 @@
 {
     "swagger": "2.0",
     "info": {
-        "version": "0.1.0",
+        "version": "0.1.1",
         "title": "Swappy REST API",
         "description": "This is Swappy's REST API. See below for all available endpoints. This is an <strong>alpha version</strong> and might still be subject to change"
     },
