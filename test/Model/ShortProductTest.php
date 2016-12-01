@@ -184,9 +184,9 @@ class ShortProductTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test attribute "live_id"
+     * Test attribute "live"
      */
-    public function testPropertyLiveId()
+    public function testPropertyLive()
     {
 
     }
@@ -259,6 +259,14 @@ class ShortProductTest extends \PHPUnit_Framework_TestCase
      * Test attribute "taxes"
      */
     public function testPropertyTaxes()
+    {
+
+    }
+
+    /**
+     * Test attribute "estimate"
+     */
+    public function testPropertyEstimate()
     {
 
     }

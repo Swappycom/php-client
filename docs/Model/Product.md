@@ -12,7 +12,7 @@ Name | Type | Description | Notes
 **description** | **string** |  | 
 **auction** | **bool** |  | 
 **date_start** | [**\DateTime**](\DateTime.md) | ISO-8601 date or Duration, if it is a duration, it will be relative to process time | [optional] 
-**live_id** | **int** |  | [optional] 
+**live** | [**\Swappy\Api\Model\Live**](Live.md) |  | [optional] 
 **price** | **double** |  | 
 **reserve_price** | **double** |  | [optional] 
 **buynow_price** | **double** |  | [optional] 
@@ -21,6 +21,7 @@ Name | Type | Description | Notes
 **payment** | [**\Swappy\Api\Model\Payment[]**](Payment.md) |  | 
 **auto_renew** | **bool** |  | [optional] 
 **taxes** | [**\Swappy\Api\Model\ProductTaxes**](ProductTaxes.md) |  | [optional] 
+**estimate** | [**\Swappy\Api\Model\ProductEstimate**](ProductEstimate.md) |  | [optional] 
 **offer** | [**\Swappy\Api\Model\ProductOffer**](ProductOffer.md) |  | [optional] 
 **duration** | **int** |  | [optional] 
 

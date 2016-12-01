@@ -14,7 +14,7 @@ Name | Type | Description | Notes
 **auction** | **bool** |  | [optional] 
 **date_end** | [**\DateTime**](\DateTime.md) |  | [optional] 
 **status** | **string** |  | [optional] 
-**live_id** | **int** |  | [optional] 
+**live** | [**\Swappy\Api\Model\Live**](Live.md) |  | [optional] 
 **price** | **double** |  | [optional] 
 **starting_price** | **double** |  | [optional] 
 **reserve_price** | **double** |  | [optional] 
@@ -24,6 +24,7 @@ Name | Type | Description | Notes
 **payment** | [**\Swappy\Api\Model\Payment[]**](Payment.md) |  | [optional] 
 **auto_renew** | **bool** |  | [optional] 
 **taxes** | [**\Swappy\Api\Model\ProductTaxes**](ProductTaxes.md) |  | [optional] 
+**estimate** | [**\Swappy\Api\Model\ProductEstimate**](ProductEstimate.md) |  | [optional] 
 **offer** | [**\Swappy\Api\Model\ShortProductOffer**](ShortProductOffer.md) |  | [optional] 
 **duration** | **int** |  | [optional] 
 

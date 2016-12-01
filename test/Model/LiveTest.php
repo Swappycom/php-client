@@ -1,6 +1,6 @@
 <?php
 /**
- * ProductTest
+ * LiveTest
  *
  * PHP version 5
  *
@@ -42,17 +42,17 @@
 namespace Swappy;
 
 /**
- * ProductTest Class Doc Comment
+ * LiveTest Class Doc Comment
  *
  * @category    Class */
-// * @description Product
+// * @description Live
 /**
  * @package     Swappy
  * @author      http://github.com/swagger-api/swagger-codegen
  * @license     http://www.apache.org/licenses/LICENSE-2.0 Apache Licene v2
  * @link        https://github.com/swagger-api/swagger-codegen
  */
-class ProductTest extends \PHPUnit_Framework_TestCase
+class LiveTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
@@ -88,9 +88,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test "Product"
+     * Test "Live"
      */
-    public function testProduct()
+    public function testLive()
     {
 
     }
@@ -104,161 +104,25 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test attribute "title"
+     * Test attribute "name"
      */
-    public function testPropertyTitle()
+    public function testPropertyName()
     {
 
     }
 
     /**
-     * Test attribute "quantity"
+     * Test attribute "location"
      */
-    public function testPropertyQuantity()
+    public function testPropertyLocation()
     {
 
     }
 
     /**
-     * Test attribute "images"
+     * Test attribute "status"
      */
-    public function testPropertyImages()
-    {
-
-    }
-
-    /**
-     * Test attribute "category"
-     */
-    public function testPropertyCategory()
-    {
-
-    }
-
-    /**
-     * Test attribute "address"
-     */
-    public function testPropertyAddress()
-    {
-
-    }
-
-    /**
-     * Test attribute "description"
-     */
-    public function testPropertyDescription()
-    {
-
-    }
-
-    /**
-     * Test attribute "auction"
-     */
-    public function testPropertyAuction()
-    {
-
-    }
-
-    /**
-     * Test attribute "date_start"
-     */
-    public function testPropertyDateStart()
-    {
-
-    }
-
-    /**
-     * Test attribute "live"
-     */
-    public function testPropertyLive()
-    {
-
-    }
-
-    /**
-     * Test attribute "price"
-     */
-    public function testPropertyPrice()
-    {
-
-    }
-
-    /**
-     * Test attribute "reserve_price"
-     */
-    public function testPropertyReservePrice()
-    {
-
-    }
-
-    /**
-     * Test attribute "buynow_price"
-     */
-    public function testPropertyBuynowPrice()
-    {
-
-    }
-
-    /**
-     * Test attribute "lot_number"
-     */
-    public function testPropertyLotNumber()
-    {
-
-    }
-
-    /**
-     * Test attribute "delivery"
-     */
-    public function testPropertyDelivery()
-    {
-
-    }
-
-    /**
-     * Test attribute "payment"
-     */
-    public function testPropertyPayment()
-    {
-
-    }
-
-    /**
-     * Test attribute "auto_renew"
-     */
-    public function testPropertyAutoRenew()
-    {
-
-    }
-
-    /**
-     * Test attribute "taxes"
-     */
-    public function testPropertyTaxes()
-    {
-
-    }
-
-    /**
-     * Test attribute "estimate"
-     */
-    public function testPropertyEstimate()
-    {
-
-    }
-
-    /**
-     * Test attribute "offer"
-     */
-    public function testPropertyOffer()
-    {
-
-    }
-
-    /**
-     * Test attribute "duration"
-     */
-    public function testPropertyDuration()
+    public function testPropertyStatus()
     {
 
     }

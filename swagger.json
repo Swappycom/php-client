@@ -494,6 +494,9 @@
         },
         "/v1/pictures": {
             "post": {
+                "consumes": [
+                    "multipart/form-data"
+                ],
                 "operationId": "uploadPicture",
                 "security": [
                     {
@@ -1090,8 +1093,8 @@
                     "format": "date-time",
                     "description": "ISO-8601 date or Duration, if it is a duration, it will be relative to process time"
                 },
-                "live_id": {
-                    "type": "integer"
+                "live": {
+                    "$ref": "#/definitions/Live"
                 },
                 "price": {
                     "type": "number",
@@ -1131,6 +1134,19 @@
                         },
                         "include_shipping": {
                             "type": "boolean"
+                        }
+                    }
+                },
+                "estimate": {
+                    "type": "object",
+                    "properties": {
+                        "min": {
+                            "type": "number",
+                            "format": "double"
+                        },
+                        "max": {
+                            "type": "number",
+                            "format": "double"
                         }
                     }
                 },
@@ -1204,8 +1220,8 @@
                 "status": {
                     "type": "string"
                 },
-                "live_id": {
-                    "type": "integer"
+                "live": {
+                    "$ref": "#/definitions/Live"
                 },
                 "price": {
                     "type": "number",
@@ -1249,6 +1265,19 @@
                         },
                         "include_shipping": {
                             "type": "boolean"
+                        }
+                    }
+                },
+                "estimate": {
+                    "type": "object",
+                    "properties": {
+                        "min": {
+                            "type": "number",
+                            "format": "double"
+                        },
+                        "max": {
+                            "type": "number",
+                            "format": "double"
                         }
                     }
                 },
@@ -1477,6 +1506,26 @@
             "required": [
                 "id",
                 "name"
+            ]
+        },
+        "Live": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "location": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "id"
             ]
         },
         "ShortAddress": {

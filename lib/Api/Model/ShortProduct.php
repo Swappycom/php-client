@@ -77,7 +77,7 @@ class ShortProduct implements ArrayAccess
         'auction' => 'bool',
         'date_end' => '\DateTime',
         'status' => 'string',
-        'live_id' => 'int',
+        'live' => '\Swappy\Api\Model\Live',
         'price' => 'double',
         'starting_price' => 'double',
         'reserve_price' => 'double',
@@ -87,6 +87,7 @@ class ShortProduct implements ArrayAccess
         'payment' => '\Swappy\Api\Model\Payment[]',
         'auto_renew' => 'bool',
         'taxes' => '\Swappy\Api\Model\ProductTaxes',
+        'estimate' => '\Swappy\Api\Model\ProductEstimate',
         'offer' => '\Swappy\Api\Model\ShortProductOffer',
         'duration' => 'int'
     );
@@ -112,7 +113,7 @@ class ShortProduct implements ArrayAccess
         'auction' => 'auction',
         'date_end' => 'date_end',
         'status' => 'status',
-        'live_id' => 'live_id',
+        'live' => 'live',
         'price' => 'price',
         'starting_price' => 'starting_price',
         'reserve_price' => 'reserve_price',
@@ -122,6 +123,7 @@ class ShortProduct implements ArrayAccess
         'payment' => 'payment',
         'auto_renew' => 'auto_renew',
         'taxes' => 'taxes',
+        'estimate' => 'estimate',
         'offer' => 'offer',
         'duration' => 'duration'
     );
@@ -147,7 +149,7 @@ class ShortProduct implements ArrayAccess
         'auction' => 'setAuction',
         'date_end' => 'setDateEnd',
         'status' => 'setStatus',
-        'live_id' => 'setLiveId',
+        'live' => 'setLive',
         'price' => 'setPrice',
         'starting_price' => 'setStartingPrice',
         'reserve_price' => 'setReservePrice',
@@ -157,6 +159,7 @@ class ShortProduct implements ArrayAccess
         'payment' => 'setPayment',
         'auto_renew' => 'setAutoRenew',
         'taxes' => 'setTaxes',
+        'estimate' => 'setEstimate',
         'offer' => 'setOffer',
         'duration' => 'setDuration'
     );
@@ -182,7 +185,7 @@ class ShortProduct implements ArrayAccess
         'auction' => 'getAuction',
         'date_end' => 'getDateEnd',
         'status' => 'getStatus',
-        'live_id' => 'getLiveId',
+        'live' => 'getLive',
         'price' => 'getPrice',
         'starting_price' => 'getStartingPrice',
         'reserve_price' => 'getReservePrice',
@@ -192,6 +195,7 @@ class ShortProduct implements ArrayAccess
         'payment' => 'getPayment',
         'auto_renew' => 'getAutoRenew',
         'taxes' => 'getTaxes',
+        'estimate' => 'getEstimate',
         'offer' => 'getOffer',
         'duration' => 'getDuration'
     );
@@ -228,7 +232,7 @@ class ShortProduct implements ArrayAccess
         $this->container['auction'] = isset($data['auction']) ? $data['auction'] : null;
         $this->container['date_end'] = isset($data['date_end']) ? $data['date_end'] : null;
         $this->container['status'] = isset($data['status']) ? $data['status'] : null;
-        $this->container['live_id'] = isset($data['live_id']) ? $data['live_id'] : null;
+        $this->container['live'] = isset($data['live']) ? $data['live'] : null;
         $this->container['price'] = isset($data['price']) ? $data['price'] : null;
         $this->container['starting_price'] = isset($data['starting_price']) ? $data['starting_price'] : null;
         $this->container['reserve_price'] = isset($data['reserve_price']) ? $data['reserve_price'] : null;
@@ -238,6 +242,7 @@ class ShortProduct implements ArrayAccess
         $this->container['payment'] = isset($data['payment']) ? $data['payment'] : null;
         $this->container['auto_renew'] = isset($data['auto_renew']) ? $data['auto_renew'] : null;
         $this->container['taxes'] = isset($data['taxes']) ? $data['taxes'] : null;
+        $this->container['estimate'] = isset($data['estimate']) ? $data['estimate'] : null;
         $this->container['offer'] = isset($data['offer']) ? $data['offer'] : null;
         $this->container['duration'] = isset($data['duration']) ? $data['duration'] : null;
     }
@@ -497,22 +502,22 @@ class ShortProduct implements ArrayAccess
     }
 
     /**
-     * Gets live_id
-     * @return int
+     * Gets live
+     * @return \Swappy\Api\Model\Live
      */
-    public function getLiveId()
+    public function getLive()
     {
-        return $this->container['live_id'];
+        return $this->container['live'];
     }
 
     /**
-     * Sets live_id
-     * @param int $live_id
+     * Sets live
+     * @param \Swappy\Api\Model\Live $live
      * @return $this
      */
-    public function setLiveId($live_id)
+    public function setLive($live)
     {
-        $this->container['live_id'] = $live_id;
+        $this->container['live'] = $live;
 
         return $this;
     }
@@ -702,6 +707,27 @@ class ShortProduct implements ArrayAccess
     public function setTaxes($taxes)
     {
         $this->container['taxes'] = $taxes;
+
+        return $this;
+    }
+
+    /**
+     * Gets estimate
+     * @return \Swappy\Api\Model\ProductEstimate
+     */
+    public function getEstimate()
+    {
+        return $this->container['estimate'];
+    }
+
+    /**
+     * Sets estimate
+     * @param \Swappy\Api\Model\ProductEstimate $estimate
+     * @return $this
+     */
+    public function setEstimate($estimate)
+    {
+        $this->container['estimate'] = $estimate;
 
         return $this;
     }
